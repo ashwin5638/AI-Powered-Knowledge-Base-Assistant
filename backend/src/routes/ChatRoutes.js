@@ -3,7 +3,7 @@ const express = require('express')
 const router = express.Router()
 
 const {protect} = require('../middleware/auth')
-const {askQuestion, getHistory, getDocumentHistory} = require('../controllers/chatController')
+const {askQuestion, getHistory, getDocumentHistory, deleteConversation} = require('../controllers/chatController')
 
 
 router.post("/ask", protect, askQuestion);
@@ -15,5 +15,7 @@ router.get(
   protect,
   getDocumentHistory
 );
+
+router.delete("/history/:id", protect, deleteConversation);
 
 module.exports = router;

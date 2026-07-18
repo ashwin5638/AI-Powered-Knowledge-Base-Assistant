@@ -80,6 +80,30 @@ const getHistory = async (req, res, next) => {
 };
 
 
+const deleteConversation = async (req, res, next) => {
+  try {
+    const conversation = await Conversation.findOneAndDelete({
+      _id: req.params.id,
+      user: req.user._id,
+    });
+
+    if (!conversation) {
+      return res.status(404).json({
+        success: false,
+        message: "Conversation not found.",
+      });
+    }
+
+    res.json({
+      success: true,
+      message: "Conversation deleted.",
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+
 const getDocumentHistory = async (req, res, next) => {
   try {
 
@@ -102,4 +126,5 @@ module.exports = {
   askQuestion,
   getHistory,
   getDocumentHistory,
+  deleteConversation,
 };

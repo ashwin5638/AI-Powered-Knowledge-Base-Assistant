@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react'
-import { FiSearch, FiMessageSquare, FiFileText, FiChevronDown, FiChevronUp } from 'react-icons/fi'
-import { getChatHistory } from '../api/chat'
+import { FiSearch, FiMessageSquare, FiFileText, FiChevronDown, FiChevronUp, FiTrash2 } from 'react-icons/fi'
+import { getChatHistory, deleteChatMessage } from '../api/chat'
 import Spinner from '../components/Spinner'
 import EmptyState from '../components/EmptyState'
 import ErrorState from '../components/ErrorState'
+import toast from 'react-hot-toast'
 
 const History = () => {
     const [conversations, setConversations] = useState([])
@@ -11,6 +12,7 @@ const History = () => {
     const [error, setError] = useState('')
     const [search, setSearch] = useState('')
     const [expanded, setExpanded] = useState({})
+    const [deletingId, setDeletingId] = useState(null)
 
     const fetchHistory = async (searchQuery = '') => {
         setLoading(true)
@@ -36,6 +38,20 @@ const History = () => {
 
     const toggleExpand = (id) => {
         setExpanded((prev) => ({ ...prev, [id]: !prev[id] }))
+    }
+
+    const handleDelete = async (id, question) => {
+        if (!window.confirm(`Delete this conversation?\n\n"${question}"`)) return
+        setDeletingId(id)
+        try {
+            await deleteChatMessage(id)
+            setConversations((prev) => prev.filter((c) => c._id !== id))
+            toast.success('Conversation deleted')
+        } catch (err) {
+            toast.error(err.response?.data?.message || 'Failed to delete conversation')
+        } finally {
+            setDeletingId(null)
+        }
     }
 
     const formatDate = (dateStr) => {
@@ -112,6 +128,13 @@ const History = () => {
                                         className="p-1.5 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-100 transition-colors shrink-0"
                                     >
                                         {expanded[conv._id] ? <FiChevronUp size={16} /> : <FiChevronDown size={16} />}
+                                    </button>
+                                    <button
+                                        onClick={() => handleDelete(conv._id, conv.question)}
+                                        disabled={deletingId === conv._id}
+                                        className="p-1.5 text-gray-400 hover:text-red-600 rounded-lg hover:bg-red-50 transition-colors shrink-0 disabled:opacity-50"
+                                    >
+                                        <FiTrash2 size={16} />
                                     </button>
                                 </div>
 

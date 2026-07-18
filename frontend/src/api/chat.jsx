@@ -11,3 +11,7 @@ export const getChatHistory = (params) => {
 export const getDocumentChatHistory = (documentId) => {
     return api.get(`/chat/history/${documentId}`)
 }
+
+export const deleteChatMessage = (id) => {
+    return api.delete(`/chat/history/${id}`)
+}
