@@ -7,7 +7,8 @@ const RETRY_DELAY_MS = 10000;
 
 const PRIMARY_MODEL = "meta-llama/llama-3.3-70b-instruct:free";
 const FALLBACK_MODEL_1 = "qwen/qwen3-coder:free";
-const FALLBACK_MODEL_2 = "google/gemma-3-27b-it:free";
+const FALLBACK_MODEL_2 = "nvidia/nemotron-3-ultra-550b-a55b:free";
+const FALLBACK_MODEL_3 = "nvidia/nemotron-nano-9b-v2:free";
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -41,7 +42,7 @@ const truncateContext = (text, maxChars) => {
 };
 
 const generateContentWithRetry = async (prompt) => {
-  const models = [PRIMARY_MODEL, FALLBACK_MODEL_1, FALLBACK_MODEL_2];
+  const models = [PRIMARY_MODEL, FALLBACK_MODEL_1, FALLBACK_MODEL_2, FALLBACK_MODEL_3];
 
   for (let attempt = 0; attempt < MAX_RETRIES; attempt++) {
     const model = models[attempt % models.length];
