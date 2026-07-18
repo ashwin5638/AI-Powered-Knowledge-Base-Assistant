@@ -6,7 +6,7 @@ const MAX_RETRIES = 3;
 const RETRY_DELAY_MS = 5000;
 
 const PRIMARY_MODEL = "meta-llama/llama-3.3-70b-instruct:free";
-const FALLBACK_MODEL = "google/gemma-3-27b-it:free";
+const FALLBACK_MODEL = "qwen/qwen3-coder:free";
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
