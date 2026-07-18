@@ -1,4 +1,4 @@
-const Document = require("../models/Document");
+const Document = require("../models/document");
 const Conversation = require("../models/Conversation");
 
 const { generateAnswer } = require("../services/aiServices");
