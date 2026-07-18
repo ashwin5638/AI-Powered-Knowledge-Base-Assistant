@@ -2,11 +2,12 @@ const ai = require("../config/ai");
 
 const MAX_CONTEXT_CHARS = 12000;
 const MAX_FULL_TEXT_CHARS = 8000;
-const MAX_RETRIES = 3;
-const RETRY_DELAY_MS = 5000;
+const MAX_RETRIES = 5;
+const RETRY_DELAY_MS = 10000;
 
 const PRIMARY_MODEL = "meta-llama/llama-3.3-70b-instruct:free";
-const FALLBACK_MODEL = "qwen/qwen3-coder:free";
+const FALLBACK_MODEL_1 = "qwen/qwen3-coder:free";
+const FALLBACK_MODEL_2 = "google/gemma-3-27b-it:free";
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -40,7 +41,7 @@ const truncateContext = (text, maxChars) => {
 };
 
 const generateContentWithRetry = async (prompt) => {
-  const models = [PRIMARY_MODEL, FALLBACK_MODEL];
+  const models = [PRIMARY_MODEL, FALLBACK_MODEL_1, FALLBACK_MODEL_2];
 
   for (let attempt = 0; attempt < MAX_RETRIES; attempt++) {
     const model = models[attempt % models.length];
