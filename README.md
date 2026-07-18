@@ -374,3 +374,9 @@ This project demonstrates practical experience with:
 * Context-Based Question Answering
 * Responsive UI Design
 * State Management with React Context
+
+---
+
+<img width="1920" height="1080" alt="Screenshot 2026-07-18 220410" src="https://github.com/user-attachments/assets/3c54c57c-7c23-4d01-a08e-3d8108cb0538" />
+<img width="1920" height="1080" alt="Screenshot 2026-07-18 220354" src="https://github.com/user-attachments/assets/691456f1-87fc-4fc1-83cb-871a12c0263e" />
+<img width="1920" height="1080" alt="Screenshot 2026-07-18 220340" src="https://github.com/user-attachments/assets/c304a338-e8f2-4dc9-bedd-525d419a7806" />
