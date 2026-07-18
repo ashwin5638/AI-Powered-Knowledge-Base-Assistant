@@ -1,9 +1,12 @@
-const ai = require("../config/gemini");
+const ai = require("../config/ai");
 
 const MAX_CONTEXT_CHARS = 12000;
 const MAX_FULL_TEXT_CHARS = 8000;
 const MAX_RETRIES = 3;
 const RETRY_DELAY_MS = 5000;
+
+const PRIMARY_MODEL = "meta-llama/llama-3.3-70b-instruct:free";
+const FALLBACK_MODEL = "google/gemma-3-31b-it:free";
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -17,17 +20,18 @@ const filterRelevantChunks = (chunks, question) => {
     .filter((w) => w.length > 2);
 
   const scored = chunks.map((chunk, index) => {
-    const lowerChunk = chunk.toLowerCase();
     let score = 0;
     for (const kw of keywords) {
-      if (lowerChunk.includes(kw)) score++;
+      if (chunk.toLowerCase().includes(kw)) score++;
     }
     return { chunk, index, score };
   });
 
   scored.sort((a, b) => b.score - a.score || a.index - b.index);
 
-  return scored.slice(0, Math.max(3, Math.ceil(chunks.length / 2))).map((s) => s.chunk);
+  return scored
+    .slice(0, Math.max(3, Math.ceil(chunks.length / 2)))
+    .map((s) => s.chunk);
 };
 
 const truncateContext = (text, maxChars) => {
@@ -36,22 +40,25 @@ const truncateContext = (text, maxChars) => {
 };
 
 const generateContentWithRetry = async (prompt) => {
+  const models = [PRIMARY_MODEL, FALLBACK_MODEL];
+
   for (let attempt = 0; attempt < MAX_RETRIES; attempt++) {
+    const model = models[attempt % models.length];
     try {
-      const response = await ai.models.generateContent({
-        model: "gemini-2.0-flash",
-        contents: prompt,
+      const response = await ai.chat.completions.create({
+        model,
+        messages: [{ role: "user", content: prompt }],
       });
-      return response.text;
+      return response.choices[0].message.content;
     } catch (error) {
       const isQuotaError =
+        error.status === 429 ||
         error.message?.includes("429") ||
         error.message?.includes("RESOURCE_EXHAUSTED") ||
-        error.message?.includes("quota");
+        error.message?.includes("rate_limit");
 
       if (isQuotaError && attempt < MAX_RETRIES - 1) {
-        const delay = RETRY_DELAY_MS * (attempt + 1);
-        await sleep(delay);
+        await sleep(RETRY_DELAY_MS * (attempt + 1));
         continue;
       }
       throw error;
@@ -62,7 +69,10 @@ const generateContentWithRetry = async (prompt) => {
 const generateAnswer = async (question, chunks, extractedText) => {
   try {
     const relevantChunks = filterRelevantChunks(chunks, question);
-    let context = truncateContext(relevantChunks.join("\n\n"), MAX_CONTEXT_CHARS);
+    let context = truncateContext(
+      relevantChunks.join("\n\n"),
+      MAX_CONTEXT_CHARS
+    );
 
     const prompt = `You are a Knowledge Base Assistant. Answer the question using the document content below.
 If the answer is partially present, provide what you can find.
