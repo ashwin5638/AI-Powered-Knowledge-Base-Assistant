@@ -377,6 +377,17 @@ This project demonstrates practical experience with:
 
 ---
 
+## ⚠️ Note About Live Demo
+
+The backend is hosted on **Render's free tier**, which automatically puts the service to sleep after a period of inactivity.
+
+* The **first request** may take **30–60 seconds** (or occasionally longer) while the backend wakes up.
+* Once the backend is active, the application responds normally.
+* If data does not load immediately, please wait a moment and refresh the page if necessary.
+
+Thank you for your patience while testing the application.
+
+
 <img width="1920" height="1080" alt="Screenshot 2026-07-18 220340" src="https://github.com/user-attachments/assets/c304a338-e8f2-4dc9-bedd-525d419a7806" />
 <img width="1920" height="1080" alt="Screenshot 2026-07-18 220410" src="https://github.com/user-attachments/assets/3c54c57c-7c23-4d01-a08e-3d8108cb0538" />
 <img width="1920" height="1080" alt="Screenshot 2026-07-18 220354" src="https://github.com/user-attachments/assets/691456f1-87fc-4fc1-83cb-871a12c0263e" />
