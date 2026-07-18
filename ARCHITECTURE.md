@@ -284,4 +284,4 @@ Protected API Access
 
 # Summary
 
-The application is designed using a modular client-server architecture. The React frontend communicates with the Express.js backend through REST APIs. The backend manages authentication, document processing, and AI interactions while MongoDB stores application data. Google Gemini AI generates context-aware answers based on uploaded documents, resulting in a scalable and maintainable full-stack application.
+The application is designed using a modular client-server architecture. The React frontend communicates with the Express.js backend through REST APIs. The backend manages authentication, document processing, and AI interactions while MongoDB stores application data. Open Router API generates context-aware answers based on uploaded documents, resulting in a scalable and maintainable full-stack application.
