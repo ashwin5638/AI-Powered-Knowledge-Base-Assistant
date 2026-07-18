@@ -3,7 +3,7 @@ const path = require("path");
 const { PDFParse } = require("pdf-parse");
 
 
-const chunkText = (text, chunkSize = 1000, overlap = 150) => {
+const chunkText = (text, chunkSize = 500, overlap = 100) => {
   const words = text.split(/\s+/);
 
   if (words.length <= chunkSize) {

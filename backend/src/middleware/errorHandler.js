@@ -29,6 +29,15 @@ const errorHandler = (err, req, res, next) => {
     });
   }
 
+  if (err.message && err.message.includes("AI generation failed")) {
+    if (err.message.includes("429") || err.message.includes("RESOURCE_EXHAUSTED")) {
+      return res.status(429).json({
+        success: false,
+        message: "AI service quota exceeded. Please try again in a minute.",
+      });
+    }
+  }
+
   res.status(err.statusCode || 500).json({
     success: false,
     message: err.message || "Internal Server Error",
