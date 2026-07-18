@@ -4,6 +4,13 @@ An AI-powered Knowledge Base Assistant that enables users to upload documents, a
 
 ---
 
+## 🌐 Live Demo
+
+* Frontend (Vercel): https://ai-powered-knowledge-base-assistant-umber.vercel.app/
+* Backend API (Render):https://ai-powered-knowledge-base-assistant-5ktv.onrender.com
+
+---
+
 ## 🚀 Features
 
 ### 🔐 Authentication
@@ -63,7 +70,56 @@ An AI-powered Knowledge Base Assistant that enables users to upload documents, a
 * JWT Authentication
 * Multer
 * PDF-Parse
-* Google Gemini AI API
+* Open Router API
+
+---
+
+# ☁️ Deployment
+
+The application is deployed using:
+
+* **Frontend:** Vercel
+* **Backend:** Render
+* **Database:** MongoDB Atlas
+* **AI Service:**Open Router API
+
+---
+
+# ⚙️ Production Environment
+
+### Backend Environment Variables
+
+```env
+PORT=5000
+MONGO_URI=your_mongodb_uri
+JWT_SECRET=your_jwt_secret
+GEMINI_API_KEY=your_gemini_api_key
+```
+
+### Frontend Environment Variables
+
+```env
+VITE_API_URL=https://your-project.onrender.com/api
+```
+
+---
+
+# 🏗️ Deployment Architecture
+
+```text
+User
+   │
+   ▼
+Frontend (React + Vite)
+Hosted on Vercel
+   │
+   ▼
+Backend (Node.js + Express)
+Hosted on Render
+   │
+   ├── MongoDB Atlas
+   └──  Open Router API
+```
 
 ---
 
@@ -76,7 +132,7 @@ knowledge-base-assistant/
 │
 │   ├── config/
 │   │   ├── db.js
-│   │   ├── gemini.js
+│   │   ├── api.js
 │   │   └── jwt.js
 │   │
 │   ├── controllers/
@@ -184,7 +240,7 @@ MONGO_URI=your_mongodb_connection_string
 
 JWT_SECRET=your_jwt_secret
 
-GEMINI_API_KEY=your_gemini_api_key
+OPENROUTER_API_KEY=your_open_router_api_key
 ```
 
 Run the backend:
@@ -314,17 +370,7 @@ This project demonstrates practical experience with:
 * RESTful API Development
 * JWT Authentication
 * File Upload & Processing
-* Google Gemini AI Integration
+* Open Router AI Integration
 * Context-Based Question Answering
 * Responsive UI Design
 * State Management with React Context
-
----
-
-
-
----
-
-## 📄 License
-
-This project is developed for educational and portfolio purposes.
