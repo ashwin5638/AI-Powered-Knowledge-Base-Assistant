@@ -93,7 +93,7 @@ The application is deployed using:
 PORT=5000
 MONGO_URI=your_mongodb_uri
 JWT_SECRET=your_jwt_secret
-GEMINI_API_KEY=your_gemini_api_key
+OPEN_ROUTER=your_openrouter_api_key
 ```
 
 ### Frontend Environment Variables
