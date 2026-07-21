@@ -5,10 +5,12 @@ const MAX_FULL_TEXT_CHARS = 8000;
 const MAX_RETRIES = 5;
 const RETRY_DELAY_MS = 10000;
 
-const PRIMARY_MODEL = "meta-llama/llama-3.3-70b-instruct:free";
-const FALLBACK_MODEL_1 = "qwen/qwen3-coder:free";
-const FALLBACK_MODEL_2 = "nvidia/nemotron-3-ultra-550b-a55b:free";
-const FALLBACK_MODEL_3 = "nvidia/nemotron-nano-9b-v2:free";
+const MODELS = [
+  "nvidia/nemotron-3-ultra-550b-a55b:free",
+  "google/gemma-4-26b-a4b-it:free",
+  "nvidia/nemotron-nano-9b-v2:free",
+  "openai/gpt-oss-20b:free",
+];
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -42,10 +44,8 @@ const truncateContext = (text, maxChars) => {
 };
 
 const generateContentWithRetry = async (prompt) => {
-  const models = [PRIMARY_MODEL, FALLBACK_MODEL_1, FALLBACK_MODEL_2, FALLBACK_MODEL_3];
-
   for (let attempt = 0; attempt < MAX_RETRIES; attempt++) {
-    const model = models[attempt % models.length];
+    const model = MODELS[attempt % MODELS.length];
     try {
       const response = await ai.chat.completions.create({
         model,
@@ -53,13 +53,17 @@ const generateContentWithRetry = async (prompt) => {
       });
       return response.choices[0].message.content;
     } catch (error) {
-      const isQuotaError =
+      const isRetryable =
         error.status === 429 ||
+        error.status === 400 ||
+        error.status === 404 ||
         error.message?.includes("429") ||
         error.message?.includes("RESOURCE_EXHAUSTED") ||
-        error.message?.includes("rate_limit");
+        error.message?.includes("rate_limit") ||
+        error.message?.includes("unavailable") ||
+        error.message?.includes("not found");
 
-      if (isQuotaError && attempt < MAX_RETRIES - 1) {
+      if (isRetryable && attempt < MAX_RETRIES - 1) {
         await sleep(RETRY_DELAY_MS * (attempt + 1));
         continue;
       }

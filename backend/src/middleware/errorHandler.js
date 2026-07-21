@@ -36,6 +36,12 @@ const errorHandler = (err, req, res, next) => {
         message: "AI service quota exceeded. Please try again in a minute.",
       });
     }
+    if (err.message.includes("unavailable") || err.message.includes("not found")) {
+      return res.status(503).json({
+        success: false,
+        message: "AI model is currently unavailable. Please try again later.",
+      });
+    }
   }
 
   res.status(err.statusCode || 500).json({

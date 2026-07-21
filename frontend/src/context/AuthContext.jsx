@@ -24,6 +24,8 @@ export const AuthProvider = ({children}) => {
                 setUser(data.user)
             } catch (error) {
                 console.error('Error loading user profile:', error)
+                localStorage.removeItem('token')
+                setUser(null)
             } finally {
                 setLoading(false)
             }
